@@ -1,0 +1,12 @@
+{
+  "require": [
+    "should",
+    "test/integration/prepare"
+  ],
+  "reporter": "spec",
+  "ui": "bdd",
+  "recursive": true,
+  "timeout": 10000,
+  "bail": true,
+  "exit": true
+}

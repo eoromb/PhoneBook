@@ -1,0 +1,16 @@
+version: '3.6'
+
+services:
+  ivaap_db:
+    image: postgres:9.6-alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_USER: pbuser
+      POSTGRES_DB: phonebook
+      POSTGRES_INITDB_ARGS: "-E UTF8"
+    volumes:
+      - ./../src/repositories/artifacts/schema.sql:/docker-entrypoint-initdb.d/1.setup.sql
+      - ./../src/repositories/artifacts/testdata.sql:/docker-entrypoint-initdb.d/2.setup.sql

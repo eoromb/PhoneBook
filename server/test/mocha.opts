@@ -1,0 +1,8 @@
+--require should
+--reporter spec
+--ui bdd
+--require test/integration/prepare
+--recursive
+--timeout 10000
+--bail
+--exit

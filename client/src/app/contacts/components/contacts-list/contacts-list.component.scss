@@ -1,0 +1,27 @@
+@import "~src/styles/base";
+@import "~src/styles/variables";
+
+.list__container-center {
+  padding: $base-padding;
+}
+.list__paginator {
+  width: $base-width;
+}
+.button__add {
+  position: fixed;
+  top: $toolbar-width;
+  right: $base-margin;
+  margin: $base-margin;
+}
+.icon {
+  margin: $base-margin;
+}
+.icon:hover {
+  cursor: pointer;
+}
+.button__upload {
+  cursor: pointer;
+}
+input[type="file"] {
+  display: none;
+}

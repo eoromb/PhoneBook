@@ -18,7 +18,7 @@ const setupRoutes = require('./src/controllers/app');
 config.version = packageJson.version;
 
 const app = express();
-app.use(cors());
+app.use(cors({exposedHeaders: ['x-total-count']}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
 app.use(bodyParser.json({limit: '50mb'}));
 //app.use(accessLogger);

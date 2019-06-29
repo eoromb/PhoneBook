@@ -1,0 +1,21 @@
+@import "./variables";
+* {
+    box-sizing: border-box;
+}
+.header {
+  text-align: center;
+}
+.container {
+    margin: 10px;
+  padding: 20px;
+  border: 2px solid grey;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 5px 5px 5px 0 rgba(0, 0, 0, 0.3);
+}
+.button {
+    margin: $base-margin;
+}
+.mat-paginator-container {
+  background: #f5f5f5;
+}

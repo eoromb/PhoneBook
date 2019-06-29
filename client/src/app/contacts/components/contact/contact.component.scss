@@ -1,0 +1,43 @@
+@import "~src/styles/variables";
+@import "~src/styles/base";
+.contact__fname {
+    grid-area: fname;
+}
+.contact__lname {
+    grid-area: lname;
+}
+.contact__phone {
+    grid-area: phone;
+}
+.contact__update {
+    grid-area: update;
+}
+.contact__delete {
+    grid-area: delete;
+}
+.contact__container {
+    @extend .container;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    grid-gap: $base-margin;
+    grid-template:
+      " fname lname phone . update delete" auto
+      / 100px 100px 100px 1fr 50px 50px;
+}
+@media (max-width: 600px) {
+    .contact__container {
+        grid-template:
+          " fname fname" auto
+          " lname lname" auto
+          " phone phone" auto
+          " update delete" auto
+          / 1fr 1fr;
+    }   
+    .contact__update {
+        justify-self: right;
+    }
+    .contact__delete {
+        justify-self: left;
+    }
+}

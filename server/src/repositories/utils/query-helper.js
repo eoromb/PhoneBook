@@ -14,13 +14,14 @@ class QueryHelper {
         let resultValues = values;
         if (limit) {
             const nlimit = +limit;
-            resultQuery = query + `LIMIT ($${values.length + 1}) `;
+            resultQuery = query + `LIMIT ($${resultValues.length + 1}) `;
             resultValues = [...values];
             resultValues.push(nlimit);
             if (page) {
-                const npage = +page;
+                let npage = +page;
+                npage = npage < 1 ? 1 : npage;
                 const offset = (npage - 1) * nlimit;
-                resultQuery += ` OFFSET ($${values.length + 1})`;
+                resultQuery += ` OFFSET ($${resultValues.length + 1})`;
                 resultValues.push(offset);
             }
         }

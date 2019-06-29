@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>{{contact?.id ? 'Edit Contact' : 'Add Contact'}}</h1>
+<form #contactForm="ngForm" class="form__contact">
+  <mat-form-field>
+    <input matInput placeholder="First Name" required [(ngModel)]="contact.fname" name="fname">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Last Name" required [(ngModel)]="contact.lname" name="lname">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Phone Number" required [(ngModel)]="contact.phonenumber" name="phonenumber">
+  </mat-form-field>
+
+  <button mat-raised-button [disabled]="contactForm.form.invalid" class="button mat-primary" color="primary"
+    (click)="onSaveClicked()">Save
+  </button>
+  <button class="button" mat-raised-button (click)="dialogRef.close()">Cancel</button>
+</form>

@@ -1,0 +1,15 @@
+<mat-drawer-container (backdropClick)="sidenav.close()" fullscreen>
+  <mat-drawer #sidenav disableClose>
+    <mat-list>
+      <mat-list-item><button mat-button routerLink="/contacts" routerLinkActive="active">Contacts</button></mat-list-item>
+    </mat-list>
+  </mat-drawer>
+  <mat-drawer-content>
+    <mat-toolbar color="primary">
+      <nav>
+        <button mat-icon-button (click)="sidenav.open()"><mat-icon>menu</mat-icon></button>
+      </nav>
+    </mat-toolbar>
+    <ng-content></ng-content>
+  </mat-drawer-content>
+</mat-drawer-container>

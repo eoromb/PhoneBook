@@ -1,17 +1,27 @@
 <h1 mat-dialog-title>{{contact?.id ? 'Edit Contact' : 'Add Contact'}}</h1>
-<form #contactForm="ngForm" class="form__contact">
+<form class="form__contact" [formGroup]="contactForm">
   <mat-form-field>
-    <input matInput placeholder="First Name" required [(ngModel)]="contact.fname" name="fname">
+    <input matInput placeholder="First Name" formControlName="firstName">
+    <mat-error>
+      <span *ngIf="contactForm?.controls.firstName?.errors?.required">Required Field</span>
+    </mat-error>
   </mat-form-field>
   <mat-form-field>
-    <input matInput placeholder="Last Name" required [(ngModel)]="contact.lname" name="lname">
+    <input matInput placeholder="Last Name" formControlName="lastName">
+    <mat-error>
+      <span *ngIf="contactForm?.controls.lastName?.errors?.required">Required Field</span>
+    </mat-error>
   </mat-form-field>
   <mat-form-field>
-    <input matInput placeholder="Phone Number" required [(ngModel)]="contact.phonenumber" name="phonenumber">
+    <input matInput placeholder="Phone Number" formControlName="phoneNumber">
+    <mat-error>
+      <span *ngIf="contactForm?.controls.phoneNumber?.errors?.required">Required Field</span>
+      <span *ngIf="!contactForm?.controls.phoneNumber?.errors?.required && contactForm?.controls.phoneNumber?.errors?.validatePhone">Supported formats: +xxxxxxxxxxx and +x-xxx-xxx-xxxx</span>
+    </mat-error>
   </mat-form-field>
 
-  <button mat-raised-button [disabled]="contactForm.form.invalid" class="button mat-primary" color="primary"
+  <button mat-raised-button [disabled]="contactForm.invalid || !valueChanged" class="button mat-primary" color="primary"
     (click)="onSaveClicked()">Save
   </button>
-  <button class="button" mat-raised-button (click)="dialogRef.close()">Cancel</button>
+  <button class="button" mat-raised-button (click)="onCloseClicked()">Cancel</button>
 </form>

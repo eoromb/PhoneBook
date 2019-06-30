@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { ConfigService } from 'src/app/core/services/config.service';
@@ -40,20 +40,24 @@ export class ContactsDataService {
      * @param page page
      * @param limit limit
      */
-    private static createQueryString(page, limit) {
-        return `page=${page}&limit=${limit}`;
+    private static createQueryString(page, limit, filter) {
+        let queryString = `page=${page}&limit=${limit}`;
+        if (filter != null && filter !== '') {
+            queryString += `&filter=${filter}`;
+        }
+        return queryString;
     }
     /**
      * Gets paginated list of contacts
      */
-    getContacts(page, limit): Observable<PaginatedList<Contact>> {
+    getContacts(page, limit, filter): Observable<PaginatedList<Contact>> {
         const contactsUrl = this.config.getContactsUrl();
         const totalHeaderName = 'x-total-count';
-        return this.http.head(`${contactsUrl}`,
+        return this.http.head(`${contactsUrl}?${ContactsDataService.createQueryString(1, 1, filter)}`,
             { observe: 'response' }).pipe(switchMap(response => {
                 const total = response.headers.get(totalHeaderName);
                 const { pageIndex, pageSize } = correctPaginationParams(page, limit, +total);
-                return this.http.get<Contact[]>(`${contactsUrl}?${ContactsDataService.createQueryString(pageIndex, pageSize)}`,
+                return this.http.get<Contact[]>(`${contactsUrl}?${ContactsDataService.createQueryString(pageIndex, pageSize, filter)}`,
                     { observe: 'response' }).pipe(
                         map((response: HttpResponse<Contact[]>) => {
                             const total = response.headers.get(totalHeaderName);

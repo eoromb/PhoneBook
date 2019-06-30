@@ -13,10 +13,12 @@ import {
 } from '@angular/material';
 import { ContactComponent } from './components/contact/contact.component';
 import { UpdateContactComponent } from './components/update-contact/update-contact.component';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FilterContactsComponent } from './components/filter-contacts/filter-contacts.component';
+import { UploadDownloadContactsComponent } from './components/upload-download-contacts/upload-download-contacts.component';
 
 @NgModule({
-  declarations: [ContactsListComponent, ContactComponent, UpdateContactComponent],
+  declarations: [ContactsListComponent, ContactComponent, UpdateContactComponent, FilterContactsComponent, UploadDownloadContactsComponent],
   imports: [
     CommonModule,
     ContactsRoutingModule,
@@ -31,7 +33,7 @@ import { FormsModule } from '@angular/forms';
     MatInputModule,
     MatProgressSpinnerModule,
     MatToolbarModule,
-    FormsModule
+    ReactiveFormsModule
   ],
   providers: [ContactsResolver],
   entryComponents: [UpdateContactComponent]

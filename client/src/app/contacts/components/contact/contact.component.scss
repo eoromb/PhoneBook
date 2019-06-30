@@ -23,7 +23,7 @@
     grid-gap: $base-margin;
     grid-template:
       " fname lname phone . update delete" auto
-      / 100px 100px 100px 1fr 50px 50px;
+      / auto auto auto 1fr 50px 50px;
 }
 @media (max-width: 600px) {
     .contact__container {

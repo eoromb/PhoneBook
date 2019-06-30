@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { LayoutComponent } from './components/layout/layout.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { RouterModule } from '@angular/router';
-import { MatButtonModule, MatToolbarModule, MatListModule, MatSidenavModule, MatIconModule } from '@angular/material';
+import { MatButtonModule, MatToolbarModule, MatListModule, MatSidenavModule, MatIconModule, MatDialogModule } from '@angular/material';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 
-const components = [LayoutComponent, NotFoundComponent];
+const components = [LayoutComponent, NotFoundComponent, ConfirmationDialogComponent];
 /**
  * Contains shared components
  */
@@ -19,7 +20,9 @@ const components = [LayoutComponent, NotFoundComponent];
     MatListModule,
     MatSidenavModule,
     MatToolbarModule,
+    MatDialogModule,
     RouterModule
-  ]
+  ],
+  entryComponents: [ConfirmationDialogComponent]
 })
 export class SharedModule { }

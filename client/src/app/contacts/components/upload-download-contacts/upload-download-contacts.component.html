@@ -1,0 +1,5 @@
+<mat-icon class="icon" (click)="onDownloadContacts()" title="Download Contacts">cloud_download</mat-icon>
+<label for="file-upload" class="button__upload">
+  <mat-icon class="icon" title="Upload Contacts">cloud_upload</mat-icon>
+</label>
+<input id="file-upload" type="file" (change)="onUploadContacts($event)" accept=".csv" />

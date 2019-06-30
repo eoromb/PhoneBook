@@ -14,15 +14,16 @@ class PhoneRecordValidator {
         if (this.phoneRecordRepository == null) {
             throw new Error('There is not repository for phone record validator');
         }
+        const phoneRegExp = /(^\+?\d{1}-\d{3}-\d{3}-\d{4}$)|(^\+?\d{11}$)/;
         this.recordSchemaAdd = Joi.object().keys({
             fname: Joi.string().alphanum().min(1).max(30).required(),
             lname: Joi.string().alphanum().min(1).max(30).required(),
-            phonenumber: Joi.string().regex(/(^\d{3}-\d{3}-\d{4}$)|(^\d{10}$)/).required()
+            phonenumber: Joi.string().regex(phoneRegExp).required()
         });
         this.recordSchemaUpdate = Joi.object().keys({
             fname: Joi.string().alphanum().min(1).max(30),
             lname: Joi.string().alphanum().min(1).max(30),
-            phonenumber: Joi.string().regex(/(^\d{3}-\d{3}-\d{4}$)|(^\d{10}$)/)
+            phonenumber: Joi.string().regex(phoneRegExp)
         });
     }
 

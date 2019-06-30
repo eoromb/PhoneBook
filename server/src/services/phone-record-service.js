@@ -96,8 +96,8 @@ class PhoneRecordService {
      * Get phone records list
      * @param {object} params params
      */
-    async getRecordList ({page, limit}) {
-        return this.phoneRecordRepository.getRecordList({page, limit});
+    async getRecordList ({page, limit, filter}) {
+        return this.phoneRecordRepository.getRecordList({page, limit, filter});
     }
 }
 

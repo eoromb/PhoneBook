@@ -6,6 +6,7 @@ import { Contact, createNewContact } from '../../models/contact.model';
 import { Subscription } from 'rxjs';
 import { PageEvent, MatDialog, MatDialogConfig } from '@angular/material';
 import { UpdateContactComponent } from '../update-contact/update-contact.component';
+import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-contacts-list',
@@ -13,7 +14,7 @@ import { UpdateContactComponent } from '../update-contact/update-contact.compone
   styleUrls: ['./contacts-list.component.scss']
 })
 export class ContactsListComponent implements OnInit, OnDestroy {
-  private readonly dialogConfig: MatDialogConfig = {
+  private readonly updateDialogConfig: MatDialogConfig = {
     disableClose: true,
     hasBackdrop: true,
     backdropClass: '',
@@ -25,6 +26,12 @@ export class ContactsListComponent implements OnInit, OnDestroy {
       left: '',
       right: ''
     }
+  };
+  private readonly deleteConfirmationDialogConfig: MatDialogConfig = {
+    disableClose: true,
+    hasBackdrop: true,
+    backdropClass: '',
+    width: '350px',
   };
   contactsLoading = false;
   private paginationContacts: PaginatedList<Contact> = createPaginatedList([]);
@@ -41,10 +48,12 @@ export class ContactsListComponent implements OnInit, OnDestroy {
     return this.paginationContacts.pagination;
   }
   private subs: Subscription[] = [];
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private route: ActivatedRoute,
     private contactsService: ContactsViewService,
     private router: Router,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog) {
+  }
 
   ngOnInit() {
     this.subs.push(this.contactsService.contacts$.subscribe(contacts => this.paginationContacts = contacts));
@@ -57,29 +66,37 @@ export class ContactsListComponent implements OnInit, OnDestroy {
     this.router.navigate(['./'], { relativeTo: this.route, queryParams: { page: ev.pageIndex + 1, limit: ev.pageSize } });
   }
   addContactClicked() {
-    const dialogRef = this.dialog.open(UpdateContactComponent, { ...this.dialogConfig, data: { contact: createNewContact() } });
+    this.contactsService.setSelectedContact(createNewContact());
+    const dialogRef = this.dialog.open(UpdateContactComponent, { ...this.updateDialogConfig });
     dialogRef.afterClosed().subscribe((contact: Contact) => {
+      if (contact == null) {
+        return;
+      }
       this.contactsService.addContact(contact);
     });
   }
   onEditContact(contact) {
-    const dialogRef = this.dialog.open(UpdateContactComponent, { ...this.dialogConfig, data: { contact: { ...contact } } });
-    dialogRef.afterClosed().subscribe((contact: Contact) => {
-      this.contactsService.updateContact(contact);
+    this.contactsService.setSelectedContact({ ...contact });
+    const dialogRef = this.dialog.open(UpdateContactComponent, { ...this.updateDialogConfig });
+    dialogRef.afterClosed().subscribe((updatedContact: Contact) => {
+      if (updatedContact == null) {
+        return null;
+      }
+      this.contactsService.updateContact(updatedContact);
     });
   }
   onDeleteContact(contact) {
-    this.contactsService.deleteContact(contact);
-  }
-  onUploadContacts(event) {
-    let fileList: FileList = event.target.files;
-    if(fileList.length > 0) {
-        let file: File = fileList[0];
-        this.contactsService.uploadContacts(file);
-        event.target.value = '';
+    if (contact == null) {
+      return null;
     }
-  }
-  onDownloadContacts() {
-    this.contactsService.downloadContacts();
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      ...this.deleteConfirmationDialogConfig,
+      data: `Do you want to delete contact ${contact.fname} ${contact.lname}?`
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.contactsService.deleteContact(contact);
+      }
+    });
   }
 }

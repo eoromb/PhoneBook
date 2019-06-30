@@ -23,7 +23,7 @@ export function createPagination(pageIndex = 1, pageSize = 20, rowsCount = 100):
  * Corrects pageIndex and pageSize based on total element number
  */
 export function correctPaginationParams(pageIndex, pageSize, total): { pageIndex: number, pageSize: number } {
-    if (Number.isNaN(pageIndex) || pageIndex < 1) {
+    if (pageIndex == null || Number.isNaN(pageIndex) || pageIndex < 1) {
         pageIndex = 1;
     }
     const resultPageSize = defaultPageSizeOptions.indexOf(pageSize) === -1 ? defaultPageSizeOptions[0] : pageSize;

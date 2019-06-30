@@ -12,7 +12,10 @@ import FileSaver from 'file-saver';
     providedIn: 'root'
 })
 export class ContactsViewService {
-
+    private filterSource = new BehaviorSubject<string | null>(null);
+    filter$: Observable<string | null> = this.filterSource.asObservable();
+    private selectedContactSource = new BehaviorSubject<Contact>(null);
+    selectedContact$: Observable<Contact> = this.selectedContactSource.asObservable();
     private contactsSource = new BehaviorSubject<PaginatedList<Contact>>(createPaginatedList([]));
     contacts$: Observable<PaginatedList<Contact>> = this.contactsSource.asObservable();
     private contactsLoadingSource = new BehaviorSubject<boolean>(false);
@@ -24,7 +27,7 @@ export class ContactsViewService {
     }
     getContacts(page, limit) {
         this.setContactsLoading(true);
-        this.contactsDataService.getContacts(page, limit)
+        this.contactsDataService.getContacts(page, limit, this.filterSource.getValue())
             .pipe(
                 catchError(this.processError('Uanble to load contacts')),
                 tap(list => this.setContacts(list))
@@ -53,7 +56,17 @@ export class ContactsViewService {
     }
     uploadContacts(file) {
         this.contactsDataService.uploadContacts(file)
-            .subscribe(() => this.reloadContacts(), this.processError('Unable to delete contact'));
+            .subscribe(() => {
+                this.showInfo(`Contacts from file '${file.name}' were successfully loaded.`);
+                this.reloadContacts();
+            }, this.processError('Unable to delete contact'));
+    }
+    setSelectedContact(contact) {
+        this.selectedContactSource.next(contact);
+    }
+    setFilter(filter) {
+        this.filterSource.next(filter);
+        this.reloadContacts();
     }
     private reloadContacts() {
         const pagination = this.contactsSource.getValue().pagination;
@@ -70,6 +83,9 @@ export class ContactsViewService {
     }
     private setContactsLoading(contactsLoading) {
         this.contactsLoadingSource.next(contactsLoading);
+    }
+    private showInfo(message) {
+        this.notificationService.showInfo(message, '');
     }
     private processError(message) {
         return (error) => {

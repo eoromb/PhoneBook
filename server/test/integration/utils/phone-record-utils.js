@@ -1,6 +1,5 @@
 const request = require('request-promise');
 const expect = require('chai').expect;
-const path = require('path');
 const utils = require('./utils');
 const fs = require('fs');
 module.exports = {
@@ -17,7 +16,9 @@ module.exports = {
         fileUpdateName: 'test/integration/data/file_updated.csv',
         fileIncorrectName: 'test/integration/data/file_incorrect.csv'
     },
-    getRecordListPaginated: async ({page, limit, errorCode}) => module.exports.getRecordList({options: {queryParams: {page, limit}, getFullResponse: true}, errorCode}),
+    getRecordListPaginated: async ({page, limit, filter, errorCode}) => module.exports.getRecordList({
+        options: {queryParams: {page, limit, filter}, getFullResponse: true}, errorCode
+    }),
     getRecordList: async ({options, errorCode} = {}) => utils.getList({...module.exports.options, ...options}, errorCode),
     addRecord: async ({fname, lname, phonenumber, errorCode}) => utils.add({
         fname,

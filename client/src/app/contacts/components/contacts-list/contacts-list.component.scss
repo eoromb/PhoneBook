@@ -4,24 +4,31 @@
 .list__container-center {
   padding: $base-padding;
 }
-.list__paginator {
+.list-controls__container {
   width: $base-width;
+  display: grid;
+  justify-items: stretch;
+  margin: $base-margin;
+  grid-gap: $base-margin;
+  grid-template:
+    " filter ud"
+    " paginator paginator" auto
+    / 1fr auto;
+}
+
+.list-controls__paginator {
+  grid-area: paginator;
+}
+.list-controls__fitler {
+  grid-area: filter;
+}
+.list-controls__uploaddownload {
+  grid-area: ud;
+  align-self: center;
 }
 .button__add {
   position: fixed;
   top: $toolbar-width;
   right: $base-margin;
   margin: $base-margin;
-}
-.icon {
-  margin: $base-margin;
-}
-.icon:hover {
-  cursor: pointer;
-}
-.button__upload {
-  cursor: pointer;
-}
-input[type="file"] {
-  display: none;
 }

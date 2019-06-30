@@ -8,8 +8,11 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class NotificationService {
-  constructor(private toasterService: ToasterService) {}
+  constructor(private toasterService: ToasterService) { }
 
+  showInfo(title: string, message: string) {
+    this.showNotification('info', title, message);
+  }
   showError(title: string, message: string, icon?: string) {
     this.showNotification('error', title, message, icon);
   }

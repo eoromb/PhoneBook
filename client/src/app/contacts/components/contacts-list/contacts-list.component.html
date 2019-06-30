@@ -2,26 +2,19 @@
 <div class="spinner" *ngIf="contactsLoading">
   <mat-spinner></mat-spinner>
 </div>
-
-
 <div class="list__container-center">
   <button class="button__add" mat-fab (click)="addContactClicked()" matTooltip="Add Contact" color="primary"
     matTooltipPosition="above">
     <mat-icon>add</mat-icon>
   </button>
-
-  <mat-toolbar  >
-    <mat-toolbar-row>
-      <mat-icon class="icon" (click)="onDownloadContacts()" title="Download Contacts">cloud_download</mat-icon>
-      <label for="file-upload" class="button__upload">
-          <mat-icon class="icon"title="Upload Contacts">cloud_upload</mat-icon>
-      </label>
-      <input id="file-upload" type="file" (change)="onUploadContacts($event)" accept=".csv"/>
-      <mat-paginator class="list__paginator" [length]="pagination?.rowsCount" [pageIndex]="pagination?.pageIndex - 1"
-        [pageSize]="pagination?.pageSize" [pageSizeOptions]="pagination?.pageSizeOptions" (page)="pageEvent($event)">
-      </mat-paginator>
-    </mat-toolbar-row>
-  </mat-toolbar>
+  <div class="list-controls__container">
+    <app-filter-contacts class="list-controls__filter"></app-filter-contacts>
+    <app-upload-download-contacts class="list-controls__uploaddownload"></app-upload-download-contacts>
+    <mat-paginator class="list-controls__paginator" [length]="pagination?.rowsCount"
+      [pageIndex]="pagination?.pageIndex - 1" [pageSize]="pagination?.pageSize"
+      [pageSizeOptions]="pagination?.pageSizeOptions" (page)="pageEvent($event)">
+    </mat-paginator>
+  </div>
   <app-contact *ngFor="let contact of contacts" [contact]="contact" (deleteContact)="onDeleteContact($event)"
     (editContact)="onEditContact($event)">
   </app-contact>

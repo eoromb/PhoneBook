@@ -132,12 +132,20 @@ class PhoneRecordRepository {
      */
     async getRecordList (params) {
         return this.dbHelper.execNonTransactional(async params => {
-            const {page, limit, task} = params;
+            const {page, limit, task, filter} = params;
             const fromQuery = ` FROM "pb"."PhoneRecord"  `;
-            const countQuery = `SELECT COUNT(*) as count ${fromQuery} `;
-            const countQueryValues = [];
+            // const countQuery = `SELECT COUNT(*) as count ${fromQuery} `;
+            // const countQueryValues = [];
+            const {query: countQuery, values: countQueryValues} =
+                QueryHelper.addFilter({query: `SELECT COUNT(*) as count ${fromQuery} `, values: [], filter});
             const {query: listQuery, values: listQueryValues} =
-                QueryHelper.addPagination(`SELECT * ${fromQuery} `, [], page, limit);
+                QueryHelper.addPagination({
+                    ...QueryHelper.addSort({
+                        ...QueryHelper.addFilter({query: `SELECT * ${fromQuery} `, values: [], filter}),
+                        sort: 'id'
+                    }),
+                    page, limit
+                });
             const listResult = await task.any(listQuery, listQueryValues);
             const countResult = await task.one(countQuery, countQueryValues);
             return {

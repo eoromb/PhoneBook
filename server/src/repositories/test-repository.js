@@ -11,14 +11,17 @@ class TestRepository {
     constructor (db, pgp) {
         this.db = db;
         this.pgp = pgp;
+        this.resetDatabaseQuery = null;
     }
     /**
      * Resets database
      */
     async resetDatabase () {
-        const fullPath = path.join(__dirname, './artifacts/schema.sql');
-        const resetDatabaseQuery = new this.pgp.QueryFile(fullPath, {minify: true});
-        await this.db.any(resetDatabaseQuery, []);
+        if (this.resetDatabaseQuery == null) {
+            const fullPath = path.join(__dirname, './artifacts/schema.sql');
+            this.resetDatabaseQuery = new this.pgp.QueryFile(fullPath, {minify: true});
+        }
+        await this.db.any(this.resetDatabaseQuery, []);
     }
 }
 module.exports = TestRepository;

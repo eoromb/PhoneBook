@@ -1,0 +1,13 @@
+@import "~src/styles/variables";
+.icon {
+  margin: $base-margin;
+}
+.icon:hover {
+  cursor: pointer;
+}
+.button__upload {
+  cursor: pointer;
+}
+input[type="file"] {
+  display: none;
+}

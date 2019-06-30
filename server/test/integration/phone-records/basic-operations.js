@@ -34,6 +34,39 @@ describe('phone record basic operations', () => {
             await recordUtils.getRecord({record: {id: 555}, errorCode: httpStatus.NOT_FOUND});
         });
     });
+    describe('filtering', () => {
+        let records;
+        beforeEach(async () => {
+            records = [];
+            records.push(await recordUtils.addRecord({...dataForTest.getRecord({index: recordInd++, fname: 'John'})}));
+            records.push(await recordUtils.addRecord({...dataForTest.getRecord({index: recordInd++, lname: 'Bill'})}));
+            records.push(await recordUtils.addRecord({...dataForTest.getRecord({index: recordInd++, fname: 'Jillany'})}));
+        });
+        afterEach(async () => {
+            for (const record of records) {
+                await recordUtils.deleteRecord({record});
+            }
+        });
+        it('should get filtered by fname', async () => {
+            const {results, total} = await recordUtils.getRecordListPaginated({filter: 'john'});
+            expect(results).to.have.lengthOf(1);
+            expect(results[0].id).to.be.equal(records[0].id);
+            expect(total).to.be.equal(1);
+        });
+        it('should get filtered by lname', async () => {
+            const {results, total} = await recordUtils.getRecordListPaginated({filter: 'bill'});
+            expect(results).to.have.lengthOf(1);
+            expect(results[0].id).to.be.equal(records[1].id);
+            expect(total).to.be.equal(1);
+        });
+        it('should get filter by part of string', async () => {
+            const {results, total} = await recordUtils.getRecordListPaginated({filter: 'ill'});
+            expect(results).to.have.lengthOf(2);
+            expect(results[0].id).to.be.equal(records[1].id);
+            expect(results[1].id).to.be.equal(records[2].id);
+            expect(total).to.be.equal(2);
+        });
+    });
     describe('validation', () => {
         let record;
         before(async () => {
@@ -81,10 +114,10 @@ describe('phone record basic operations', () => {
                 const recordDesc = dataForTest.getRecord({index: recordInd++});
                 await recordUtils.addRecord(({...recordDesc, phonenumber: undefined, errorCode: httpStatus.BAD_REQUEST}));
             });
-            it('should not allowed unsupported phones formats (supported is xxx-xxx-xxxx or xxxxxxxxxx)', async () => {
+            it('should not allowed unsupported phones formats (supported is x-xxx-xxx-xxxx or xxxxxxxxxxx)', async () => {
                 const recordDesc = dataForTest.getRecord({index: recordInd++, phonenumber: '12345'});
                 await recordUtils.addRecord(({...recordDesc, errorCode: httpStatus.BAD_REQUEST}));
-                const record = await recordUtils.addRecord(({...recordDesc, phonenumber: '111-111-1111'}));
+                const record = await recordUtils.addRecord(({...recordDesc, phonenumber: '7-111-111-1111'}));
                 await recordUtils.deleteRecord({record});
             });
         });
@@ -106,6 +139,14 @@ describe('phone record basic operations', () => {
             expect(record.fname).to.be.equal(recordDescUpdated.fname);
             expect(record.lname).to.be.equal(recordDescUpdated.lname);
             expect(record.phonenumber).to.be.equal(recordDescUpdated.phonenumber);
+            await recordUtils.deleteRecord({record});
+        });
+        it('should update only phone number', async () => {
+            const recordDesc = dataForTest.getRecord({index: recordInd++});
+            const phoneNumberUpdated = '71111112222';
+            let record = await recordUtils.addRecord({...recordDesc});
+            record = await recordUtils.updateRecord({record, body: {phonenumber: phoneNumberUpdated}});
+            expect(record.phonenumber).to.be.equal(phoneNumberUpdated);
             await recordUtils.deleteRecord({record});
         });
     });

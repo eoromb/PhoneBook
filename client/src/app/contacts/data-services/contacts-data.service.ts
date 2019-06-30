@@ -62,11 +62,11 @@ export class ContactsDataService {
                 const { pageIndex, pageSize } = correctPaginationParams(page, limit, +total);
                 return this.http.get<Contact[]>(`${contactsUrl}?${ContactsDataService.createQueryString(pageIndex, pageSize, filter)}`,
                     { observe: 'response' }).pipe(
-                        map((response: HttpResponse<Contact[]>) => {
-                            const total = response.headers.get(totalHeaderName);
+                        map((listResponse: HttpResponse<Contact[]>) => {
+                            const totalContacts = listResponse.headers.get(totalHeaderName);
                             return createPaginatedList(
-                                response.body.map(data => ContactsDataService.createContactFromHttpData(data)),
-                                createPagination(pageIndex, pageSize, +total));
+                                listResponse.body.map(data => ContactsDataService.createContactFromHttpData(data)),
+                                createPagination(pageIndex, pageSize, +totalContacts));
                         })
                     );
             }));

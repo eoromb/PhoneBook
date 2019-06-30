@@ -14,7 +14,8 @@ import { Subscription } from 'rxjs';
 })
 export class FilterContactsComponent implements OnInit, OnDestroy {
   filterForm: FormGroup;
-  subs: Subscription[] = [];
+  private subs: Subscription[] = [];
+  private readonly debounceTimeout = 600;
   constructor(
     private contactsService: ContactsViewService,
     private formBuilder: FormBuilder) {
@@ -31,7 +32,7 @@ export class FilterContactsComponent implements OnInit, OnDestroy {
     });
     this.subs.push(
       this.filterForm.valueChanges.pipe(
-        debounceTime(1000)
+        debounceTime(this.debounceTimeout)
       ).subscribe(value => this.contactsService.setFilter(value.nameFilter)));
   }
 }

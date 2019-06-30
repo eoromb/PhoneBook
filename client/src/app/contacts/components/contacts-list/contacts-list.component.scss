@@ -1,8 +1,16 @@
 @import "~src/styles/base";
 @import "~src/styles/variables";
-
-.list__container-center {
-  padding: $base-padding;
+.list__layout {
+  width: $base-width;
+  height: calc(100% - #{$toolbar-height});
+  display: grid;
+  justify-items: stretch;
+  grid-gap: $base-margin;
+  grid-template:
+    " header" auto
+    " controls" auto
+    " contacts" 1fr
+    / 1fr auto;
 }
 .list-controls__container {
   width: $base-width;
@@ -10,6 +18,7 @@
   justify-items: stretch;
   margin: $base-margin;
   grid-gap: $base-margin;
+  grid-area: controls;
   grid-template:
     " filter ud" auto
     " paginator paginator" auto
@@ -25,12 +34,16 @@
   grid-area: ud;
   align-self: center;
 }
+.list__header {
+  grid-area: header;
+}
 .list__contacts {
   overflow: auto;
+  grid-area: contacts;
 }
 .button__add {
   position: fixed;
-  top: $toolbar-width;
+  top: $toolbar-height;
   right: $base-margin;
   margin: $base-margin;
 }

@@ -12,6 +12,6 @@ export class ConfigService {
   constructor() {
   }
   public getContactsUrl() {
-    return `${this.apiBaseUrl}/records`;
+    return `${this.apiBaseUrl}/contacts`;
   }
 }

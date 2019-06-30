@@ -4,6 +4,6 @@ module.exports = services => {
     return asyncWrapper(async (req, res) => {
         const {page, limit} = req.query;
 
-        await downloadService.downloadPhoneRecords({page, limit, response: res});
+        await downloadService.downloadContacts({page, limit, response: res});
     });
 };

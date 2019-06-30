@@ -3,31 +3,31 @@ const expect = require('chai').expect;
 const utils = require('./utils');
 const fs = require('fs');
 module.exports = {
-    checkRecord: record => {
-        expect(record).to.have.property('id');
-        expect(record).to.have.property('fname');
-        expect(record).to.have.property('lname');
-        expect(record).to.have.property('phonenumber');
+    checkContact: contact => {
+        expect(contact).to.have.property('id');
+        expect(contact).to.have.property('fname');
+        expect(contact).to.have.property('lname');
+        expect(contact).to.have.property('phonenumber');
     },
     options: {
-        baseUrl: 'http://localhost:3000/api/v1/records',
-        checkFn: record => module.exports.checkRecord(record),
+        baseUrl: 'http://localhost:3000/api/v1/contacts',
+        checkFn: contact => module.exports.checkContact(contact),
         fileName: 'test/integration/data/file.csv',
         fileUpdateName: 'test/integration/data/file_updated.csv',
         fileIncorrectName: 'test/integration/data/file_incorrect.csv'
     },
-    getRecordListPaginated: async ({page, limit, filter, errorCode}) => module.exports.getRecordList({
+    getContactListPaginated: async ({page, limit, filter, errorCode}) => module.exports.getContactList({
         options: {queryParams: {page, limit, filter}, getFullResponse: true}, errorCode
     }),
-    getRecordList: async ({options, errorCode} = {}) => utils.getList({...module.exports.options, ...options}, errorCode),
-    addRecord: async ({fname, lname, phonenumber, errorCode}) => utils.add({
+    getContactList: async ({options, errorCode} = {}) => utils.getList({...module.exports.options, ...options}, errorCode),
+    addContact: async ({fname, lname, phonenumber, errorCode}) => utils.add({
         fname,
         lname,
         phonenumber
     }, module.exports.options, errorCode),
-    getRecord: async ({record, errorCode}) => utils.get(record, module.exports.options, errorCode),
-    deleteRecord: async ({record, errorCode}) => utils.delete(record, module.exports.options, errorCode),
-    updateRecord: async ({record, body, errorCode}) => utils.update(record, body, module.exports.options, errorCode),
+    getContact: async ({contact, errorCode}) => utils.get(contact, module.exports.options, errorCode),
+    deleteContact: async ({contact, errorCode}) => utils.delete(contact, module.exports.options, errorCode),
+    updateContact: async ({contact, body, errorCode}) => utils.update(contact, body, module.exports.options, errorCode),
     upload: async ({updated = false, incorrect = false, errorCode} = {}) => {
         const {baseUrl, fileName, fileUpdateName, fileIncorrectName} = module.exports.options;
         let file = fileName;

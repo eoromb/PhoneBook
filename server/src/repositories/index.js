@@ -1,6 +1,6 @@
-const PhoneRecordRepository = require('./phone-record-repository');
+const ContactRepository = require('./contact-repository');
 const DbHelper = require('./utils/db-helper');
-const PhoneRecordMapper = require('./mappers/phone-record-mapper');
+const ContactMapper = require('./mappers/contact-mapper');
 const TestRepository = require('./test-repository');
 const pgp = require('pg-promise')();
 
@@ -12,9 +12,9 @@ module.exports = configService => {
     const repositories = {};
     const db = initializeDatabase(dbConfig);
     const dbHelper = new DbHelper(db, pgp);
-    const recordMapper = new PhoneRecordMapper();
+    const contactMapper = new ContactMapper();
 
-    repositories.phonerecord = new PhoneRecordRepository(recordMapper, dbHelper);
+    repositories.contact = new ContactRepository(contactMapper, dbHelper);
     repositories.test = new TestRepository(db, pgp);
 
     return repositories;

@@ -5,7 +5,7 @@ import { ContactsDataService } from './contacts-data.service';
 import { Contact } from '../models/contact.model';
 
 /**
- * Album data service test
+ * Contacts data service test
  */
 describe('ContactDataService', () => {
     let service: ContactsDataService;

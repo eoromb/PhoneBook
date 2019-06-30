@@ -1,4 +1,7 @@
-class PhoneRecord {
+/**
+ * Contact model
+ */
+class Contact {
     constructor (id, fname, lname, phoneNumber) {
         this.id = id;
         this.fname = fname;
@@ -18,4 +21,4 @@ class PhoneRecord {
         return this.phonenumber;
     }
 }
-module.exports = PhoneRecord;
+module.exports = Contact;

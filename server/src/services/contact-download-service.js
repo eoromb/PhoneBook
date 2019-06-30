@@ -6,22 +6,22 @@ const CsvFields = [
     {header: 'Phone number', key: 'phonenumber', width: 30}
 ];
 
-class PhoneRecordDownloadService {
+class ContactDownloadService {
     constructor ({services}) {
-        this.recordService = services.phonerecord;
+        this.contactService = services.contact;
     }
-    static createCSVWorkBook (records) {
+    static createCSVWorkBook (contacts) {
         const wb = new Excel.Workbook();
         const ws = wb.addWorksheet('PhoneBook');
         ws.columns = CsvFields;
-        ws.addRows(records);
+        ws.addRows(contacts);
 
         return wb;
     }
 
-    async downloadPhoneRecords ({page, limit, response}) {
-        const records = (await this.recordService.getRecordList({page, limit})).rows;
-        const wb = PhoneRecordDownloadService.createCSVWorkBook(records, response);
+    async downloadContacts ({page, limit, response}) {
+        const contacts = (await this.contactService.getContactList({page, limit})).rows;
+        const wb = ContactDownloadService.createCSVWorkBook(contacts, response);
         response.writeHead(200, {
             'Content-Disposition': 'attachment; filename="file.csv"',
             'Content-Type': 'text/csv'
@@ -30,4 +30,4 @@ class PhoneRecordDownloadService {
     }
 }
 
-module.exports = PhoneRecordDownloadService;
+module.exports = ContactDownloadService;

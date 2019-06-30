@@ -2,25 +2,25 @@ const Joi = require('@hapi/joi');
 const ValidatiorResult = require('../common/models/validation-result');
 
 /**
- * Validator for phone record operation
+ * Validator for contact operation
  */
-class PhoneRecordValidator {
+class ContactValidator {
     /**
      * @constructor
      * @param {*} repositories repositories
      */
     constructor (repositories) {
-        this.phoneRecordRepository = repositories.phonerecord;
-        if (this.phoneRecordRepository == null) {
-            throw new Error('There is not repository for phone record validator');
+        this.contactRepository = repositories.contact;
+        if (this.contactRepository == null) {
+            throw new Error('There is not repository for contact validator');
         }
         const phoneRegExp = /(^\+?\d{1}-\d{3}-\d{3}-\d{4}$)|(^\+?\d{11}$)/;
-        this.recordSchemaAdd = Joi.object().keys({
+        this.contactSchemaAdd = Joi.object().keys({
             fname: Joi.string().alphanum().min(1).max(30).required(),
             lname: Joi.string().alphanum().min(1).max(30).required(),
             phonenumber: Joi.string().regex(phoneRegExp).required()
         });
-        this.recordSchemaUpdate = Joi.object().keys({
+        this.contactSchemaUpdate = Joi.object().keys({
             fname: Joi.string().alphanum().min(1).max(30),
             lname: Joi.string().alphanum().min(1).max(30),
             phonenumber: Joi.string().regex(phoneRegExp)
@@ -28,13 +28,13 @@ class PhoneRecordValidator {
     }
 
     /**
-     * Validate add record operation parameters
+     * Validate add contact operation parameters
      * @param {object} params params
      */
-    async addRecordValidate (params) {
+    async addContactValidate (params) {
         const {fname, lname, phonenumber, validateOnlySchema = false} = params;
         const validationResult = new ValidatiorResult();
-        const result = Joi.validate({fname, lname, phonenumber}, this.recordSchemaAdd);
+        const result = Joi.validate({fname, lname, phonenumber}, this.contactSchemaAdd);
         if (result.error) {
             validationResult.addError(result.error.message);
             return validationResult;
@@ -42,61 +42,61 @@ class PhoneRecordValidator {
         if (validateOnlySchema) {
             return validationResult;
         }
-        const record = await this.phoneRecordRepository.getRecordByName({fname, lname});
-        if (record != null) {
-            validationResult.addError(`Record with such name already exists. fname: ${fname}. lname: ${lname}`);
+        const contact = await this.contactRepository.getContactByName({fname, lname});
+        if (contact != null) {
+            validationResult.addError(`Contact with such name already exists. fname: ${fname}. lname: ${lname}`);
             return validationResult;
         }
         return validationResult;
     }
 
     /**
-     * Validates update record operation parameters
-     * @param {number} id record id
+     * Validates update contact operation parameters
+     * @param {number} id contact id
      * @param {*} params params
      */
-    async updateRecordValidate (id, params) {
+    async updateContactValidate (id, params) {
         const {fname, lname, phonenumber} = params;
         const validationResult = new ValidatiorResult();
         if (id == null) {
-            validationResult.addError('Id are not allowed to be null on record update');
+            validationResult.addError('Id are not allowed to be null on contact update');
             return validationResult;
         }
-        const result = Joi.validate({fname, lname, phonenumber}, this.recordSchemaUpdate);
+        const result = Joi.validate({fname, lname, phonenumber}, this.contactSchemaUpdate);
         if (result.error) {
             validationResult.addError(result.error.message);
             return validationResult;
         }
-        let record = await this.phoneRecordRepository.getRecordById({id});
-        if (record == null) {
-            validationResult.addError('Record to update does not exist');
+        let contact = await this.contactRepository.getContactById({id});
+        if (contact == null) {
+            validationResult.addError('Contact to update does not exist');
             return validationResult;
         }
-        record = await this.phoneRecordRepository.getRecordByName({fname, lname});
-        if (record != null && record.id !== id) {
-            validationResult.addError(`Record with name updated to already exists. fname: ${fname}. lname: ${lname}`);
+        contact = await this.contactRepository.getContactByName({fname, lname});
+        if (contact != null && contact.id !== id) {
+            validationResult.addError(`Contact with name updated to already exists. fname: ${fname}. lname: ${lname}`);
             return validationResult;
         }
         return validationResult;
     }
 
     /**
-     * Validates delete record
-     * @param {number} id record id
+     * Validates delete contact
+     * @param {number} id contact id
      */
-    async deleteRecordValidate (id) {
+    async deleteContactValidate (id) {
         const validationResult = new ValidatiorResult();
         if (id == null) {
-            validationResult.addError('Id are not allowed to be null on record delete');
+            validationResult.addError('Id are not allowed to be null on contact delete');
             return validationResult;
         }
-        const record = await this.phoneRecordRepository.getRecordById({id});
-        if (record == null) {
-            validationResult.addError('Record to delete not exists');
+        const contact = await this.contactRepository.getContactById({id});
+        if (contact == null) {
+            validationResult.addError('Contact to delete not exists');
             return validationResult;
         }
         return validationResult;
     }
 }
 
-module.exports = PhoneRecordValidator;
+module.exports = ContactValidator;

@@ -7,20 +7,20 @@ const CsvFields = [
     {name: 'phonenumber', index: 3}
 ];
 
-class PhoneRecordUploadService {
+class ContactUploadService {
     constructor ({services}) {
-        this.recordService = services.phonerecord;
+        this.contactService = services.contact;
     }
 
-    static createRecordFromCSVRow (row) {
-        const record = {};
+    static createContactFromCSVRow (row) {
+        const contact = {};
         CsvFields.forEach(f => {
-            record[f.name] = row.getCell(f.index).value;
+            contact[f.name] = row.getCell(f.index).value;
         });
-        return record;
+        return contact;
     }
 
-    async uploadPhoneRecord ({file: {buffer}}) {
+    async uploadContact ({file: {buffer}}) {
         const stream = new Readable();
         stream.push(buffer);
         stream.push(null);
@@ -31,15 +31,15 @@ class PhoneRecordUploadService {
             }
         };
         const worksheet = await workbook.csv.read(stream, options);
-        const records = [];
+        const contacts = [];
         worksheet.eachRow({includeEmpty: false}, function (row, rowNumber) {
             if (rowNumber > 1) {
-                records.push(PhoneRecordUploadService.createRecordFromCSVRow(row));
+                contacts.push(ContactUploadService.createContactFromCSVRow(row));
             }
         });
-        return this.recordService.addOrUpdateRecordsByName({records});
+        return this.contactService.addOrUpdateContactsByName({contacts});
     }
 }
 
-module.exports = PhoneRecordUploadService;
+module.exports = ContactUploadService;
 

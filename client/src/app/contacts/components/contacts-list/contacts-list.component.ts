@@ -8,6 +8,9 @@ import { PageEvent, MatDialog, MatDialogConfig } from '@angular/material';
 import { UpdateContactComponent } from '../update-contact/update-contact.component';
 import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
 
+/**
+ * Component to show list of contacts
+ */
 @Component({
   selector: 'app-contacts-list',
   templateUrl: './contacts-list.component.html',
@@ -54,7 +57,6 @@ export class ContactsListComponent implements OnInit, OnDestroy {
     private router: Router,
     private dialog: MatDialog) {
   }
-
   ngOnInit() {
     this.subs.push(this.contactsService.contacts$.subscribe(contacts => this.paginationContacts = contacts));
     this.subs.push(this.contactsService.contactsLoading$.subscribe(contactsLoading => this.contactsLoading = contactsLoading));
@@ -62,10 +64,17 @@ export class ContactsListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subs.forEach(s => s.unsubscribe());
   }
+  /**
+   * Processes pagination event
+   * @param ev pagination event
+   */
   pageEvent(ev: PageEvent) {
     this.router.navigate(['./'], { relativeTo: this.route, queryParams: { page: ev.pageIndex + 1, limit: ev.pageSize } });
   }
-  addContactClicked() {
+  /**
+   * Processes contact adding
+   */
+  onAddContact() {
     this.contactsService.setSelectedContact(createNewContact());
     const dialogRef = this.dialog.open(UpdateContactComponent, { ...this.updateDialogConfig });
     dialogRef.afterClosed().subscribe((contact: Contact) => {
@@ -75,6 +84,9 @@ export class ContactsListComponent implements OnInit, OnDestroy {
       this.contactsService.addContact(contact);
     });
   }
+  /**
+   * Processes contact editing
+   */
   onEditContact(contact) {
     this.contactsService.setSelectedContact({ ...contact });
     const dialogRef = this.dialog.open(UpdateContactComponent, { ...this.updateDialogConfig });
@@ -85,6 +97,9 @@ export class ContactsListComponent implements OnInit, OnDestroy {
       this.contactsService.updateContact(updatedContact);
     });
   }
+  /**
+   * Processes contact deleting
+   */
   onDeleteContact(contact) {
     if (contact == null) {
       return null;

@@ -20,8 +20,8 @@
     </mat-error>
   </mat-form-field>
 
-  <button mat-raised-button [disabled]="contactForm.invalid || !valueChanged" class="button mat-primary" color="primary"
-    (click)="onSaveClicked()">Save
+  <button role="button" mat-raised-button [disabled]="contactForm.invalid || !valueChanged" class="button mat-primary" color="primary"
+    (click)="onSave()">Save
   </button>
-  <button class="button" mat-raised-button (click)="onCloseClicked()">Cancel</button>
+  <button role="button" class="button" mat-raised-button (click)="onClose()" class="button mat-primary" color="primary">Cancel</button>
 </form>

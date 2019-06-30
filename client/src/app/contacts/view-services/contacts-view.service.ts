@@ -8,6 +8,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import FileSaver from 'file-saver';
 
+/**
+ * Service to store view state
+ */
 @Injectable({
     providedIn: 'root'
 })
@@ -23,47 +26,77 @@ export class ContactsViewService {
     constructor(
         private contactsDataService: ContactsDataService,
         private notificationService: NotificationService) {
-
     }
+    /**
+     * Gets contacts from data service
+     * @param page page number
+     * @param limit number of contacts on page
+     */
     getContacts(page, limit) {
         this.setContactsLoading(true);
         this.contactsDataService.getContacts(page, limit, this.filterSource.getValue())
-            .pipe(
-                catchError(this.processError('Uanble to load contacts')),
-                tap(list => this.setContacts(list))
-            )
-            .subscribe(() => { this.setContactsLoading(false); });
+            .subscribe(list => {
+                this.setContactsLoading(false);
+                this.setContacts(list);
+            }, this.processError('Unable to load contacts'));
     }
+    /**
+     * Adds contact to data service
+     * @param contact contact to add
+     */
     addContact(contact) {
         this.setContactsLoading(true);
         this.contactsDataService.addContact(contact)
             .subscribe(() => this.reloadContacts(), this.processError('Unable to add contact'));
     }
+    /**
+     * Updates contact at data service
+     * @param contact contact to update
+     */
     updateContact(contact) {
         this.setContactsLoading(true);
         this.contactsDataService.updateContact(contact)
             .subscribe(() => this.reloadContacts(), this.processError('Unable to update contact'));
     }
+    /**
+     * Deletes contact at data service
+     * @param contact contact to вудуеу
+     */
     deleteContact(contact) {
         this.contactsDataService.deleteContact(contact)
             .subscribe(() => this.reloadContacts(), this.processError('Unable to delete contact'));
     }
+    /**
+     * Downloads contacts from data service
+     */
     downloadContacts() {
         this.contactsDataService.downloadContacts()
             .subscribe((fileData: Blob) => {
                 FileSaver.saveAs(fileData, 'summary.csv');
-            });
+            }, this.processError('Unable to download contacts'));
     }
+    /**
+     * Uploads contacts file to service
+     * @param file contacts file to upload
+     */
     uploadContacts(file) {
         this.contactsDataService.uploadContacts(file)
             .subscribe(() => {
-                this.showInfo(`Contacts from file '${file.name}' were successfully loaded.`);
+                this.showInfo(`Contacts from file '${file.name}' were successfully uploaded.`);
                 this.reloadContacts();
-            }, this.processError('Unable to delete contact'));
+            }, this.processError('Unable to upload contacts'));
     }
+    /**
+     * Sets contact as selected one
+     * @param contact contact to set as selected one
+     */
     setSelectedContact(contact) {
         this.selectedContactSource.next(contact);
     }
+    /**
+     * Set filter for contacts
+     * @param filter filter to be used on get contacts
+     */
     setFilter(filter) {
         this.filterSource.next(filter);
         this.reloadContacts();

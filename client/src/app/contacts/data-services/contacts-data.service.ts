@@ -49,6 +49,9 @@ export class ContactsDataService {
     }
     /**
      * Gets paginated list of contacts
+     * @param page page to get
+     * @param limit number of contact on page
+     * @param filter filter to apply
      */
     getContacts(page, limit, filter): Observable<PaginatedList<Contact>> {
         const contactsUrl = this.config.getContactsUrl();
@@ -68,6 +71,10 @@ export class ContactsDataService {
                     );
             }));
     }
+    /**
+     * Calles add contact API
+     * @param contact contact to add
+     */
     addContact(contact: Contact) {
         if (contact == null) {
             return of(null);
@@ -75,6 +82,10 @@ export class ContactsDataService {
         const contactsUrl = this.config.getContactsUrl();
         return this.http.post(contactsUrl, ContactsDataService.createHttpDataFromContract(contact));
     }
+    /**
+     * Calls update contact API
+     * @param contact contact to update
+     */
     updateContact(contact: Contact) {
         if (contact == null) {
             return of(null);
@@ -82,6 +93,10 @@ export class ContactsDataService {
         const contactsUrl = this.config.getContactsUrl();
         return this.http.put(`${contactsUrl}/${contact.id}`, ContactsDataService.createHttpDataFromContract(contact));
     }
+    /**
+     * Calls delete contact API
+     * @param contact contact to delete
+     */
     deleteContact(contact: Contact) {
         if (contact == null) {
             return of(null);
@@ -89,17 +104,23 @@ export class ContactsDataService {
         const contactsUrl = this.config.getContactsUrl();
         return this.http.delete(`${contactsUrl}/${contact.id}`);
     }
+    /**
+     * Calls download contacts API
+     */
     downloadContacts() {
         const contactsUrl = this.config.getContactsUrl();
         return this.http.get(`${contactsUrl}/download`, { responseType: 'blob' });
     }
+    /**
+     * Uploads contacts
+     * @param contactsFile contacts file to upload
+     */
     uploadContacts(contactsFile) {
-        let formData: FormData = new FormData();
+        const formData: FormData = new FormData();
         formData.append('file', contactsFile, contactsFile.name);
-        let headers = new HttpHeaders();
+        const headers = new HttpHeaders();
         headers.append('Content-Type', 'multipart/form-data');
-        headers.append('Accept', 'application/json');
-        let options = { headers };
+        const options = { headers };
         const contactsUrl = this.config.getContactsUrl();
         return this.http.post(`${contactsUrl}/upload`, formData, options);
     }

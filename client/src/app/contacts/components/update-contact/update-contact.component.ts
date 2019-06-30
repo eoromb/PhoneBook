@@ -4,9 +4,10 @@ import { Contact } from '../../models/contact.model';
 import { ContactsViewService } from '../../view-services/contacts-view.service';
 import { Subscription } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { filter } from 'rxjs/operators';
 import { validatePhone } from '../../validators/phone.validator';
-
+/**
+ * Component to make contact updating
+ */
 @Component({
   selector: 'app-update-contact',
   templateUrl: './update-contact.component.html',
@@ -31,11 +32,17 @@ export class UpdateContactComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subs.forEach(s => s.unsubscribe());
   }
-  onSaveClicked() {
+  /**
+   * Save button handler
+   */
+  onSave() {
     this.setContactValueFromForm(this.contactForm.value);
     this.dialogRef.close(this.contact);
   }
-  onCloseClicked() {
+  /**
+   * Close button handler
+   */
+  onClose() {
     this.dialogRef.close();
   }
   private setContact(contact) {

@@ -3,7 +3,7 @@
   <mat-spinner></mat-spinner>
 </div>
 <div class="list__container-center">
-  <button class="button__add" mat-fab (click)="addContactClicked()" matTooltip="Add Contact" color="primary"
+  <button role="button" class="button__add" mat-fab (click)="onAddContact()" matTooltip="Add Contact" color="primary"
     matTooltipPosition="above">
     <mat-icon>add</mat-icon>
   </button>
@@ -15,8 +15,9 @@
       [pageSizeOptions]="pagination?.pageSizeOptions" (page)="pageEvent($event)">
     </mat-paginator>
   </div>
-  <app-contact *ngFor="let contact of contacts" [contact]="contact" (deleteContact)="onDeleteContact($event)"
-    (editContact)="onEditContact($event)">
-  </app-contact>
-
+  <div class="list__contacts">
+      <app-contact *ngFor="let contact of contacts" [contact]="contact" (deleteContact)="onDeleteContact($event)"
+        (editContact)="onEditContact($event)">
+      </app-contact>
+    </div>
 </div>

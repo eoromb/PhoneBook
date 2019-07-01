@@ -3,7 +3,6 @@ const cors = require('cors');
 const config = require('./config');
 const packageJson = require('./package');
 const bodyParser = require('body-parser');
-// const accessLogger = require('./src/common/logging/accesslogger')();
 const logger = require('./src/common/logging/log')();
 const ConfigService = require('./src/common/services/config-service');
 const LogService = require('./src/common/services/log-service');
@@ -21,7 +20,6 @@ const app = express();
 app.use(cors({exposedHeaders: ['x-total-count']}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false}));
 app.use(bodyParser.json({limit: '50mb'}));
-//app.use(accessLogger);
 setupRoutes(app, services);
 
 const port = process.env.PORT || config['port'] || 3000;
@@ -32,12 +30,8 @@ process.on('uncaughtException', function (err) {
     throw err;
 });
 
-app.disable('etag').disable('x-powered-by');
-app.enable('trust proxy');
-// all environments
 app.set('port', port);
 
-// Run server
 const server = app.listen(port, function () {
     const host = server.address().address;
     const port = server.address().port;

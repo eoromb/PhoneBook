@@ -7,6 +7,9 @@ const pgp = require('pg-promise')();
 const initializeDatabase = function (dbConfig) {
     return pgp(dbConfig);
 };
+/**
+ * Composition root for repositories
+ */
 module.exports = configService => {
     const dbConfig = configService.getDatabaseConfig();
     const repositories = {};

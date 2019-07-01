@@ -1,5 +1,5 @@
 /**
- * Config service
+ * Configuration service
  */
 class ConfigService {
     /**
@@ -8,6 +8,8 @@ class ConfigService {
      */
     constructor (config) {
         this.config = config;
+        this.config.database.host = process.env.DB_HOST || this.config.database.host;
+        this.config.database.port = process.env.DB_PORT || this.config.database.port;
     }
     /**
      * Gets database configuration

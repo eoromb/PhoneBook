@@ -1,3 +1,6 @@
+/**
+ * Helper to process exception in middleware
+ */
 function asyncWrapper (fn) {
   return async (req, res, next) => {
     try {

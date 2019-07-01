@@ -3,6 +3,9 @@ const ContactService = require('./contact-service');
 const ContactDownloadService = require('./contact-download-service');
 const ContactUploadService = require('./contact-upload-service');
 
+/**
+ * Composition root for services
+ */
 module.exports = ({repositories, validators, configService, logService}) => {
     const services = {};
     services.contact = new ContactService({repositories, validators});

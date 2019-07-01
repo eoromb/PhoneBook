@@ -1,4 +1,7 @@
 const Contact = require('../models/contact');
+/**
+ * Maps contact model from/to datatbase entity
+ */
 class ContactMapper {
     checkContactEntity (entity) {
         if (entity == null) {

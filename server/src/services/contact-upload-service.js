@@ -7,6 +7,9 @@ const CsvFields = [
     {name: 'phonenumber', index: 3}
 ];
 
+/**
+ * Service for contact uploading
+ */
 class ContactUploadService {
     constructor ({services}) {
         this.contactService = services.contact;
@@ -20,6 +23,12 @@ class ContactUploadService {
         return contact;
     }
 
+    /**
+     * Uploads contact's file
+     * @param {object} param params
+     * @param {object} param.file file to upload
+     * @param {Array} param.file.buffer files buffer to upload
+     */
     async uploadContact ({file: {buffer}}) {
         const stream = new Readable();
         stream.push(buffer);

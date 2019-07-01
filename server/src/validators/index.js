@@ -1,4 +1,7 @@
 const ContactValidator = require('./contact-validator');
+/**
+ * Composition root for validators
+ */
 module.exports = options => {
     const {repositories} = options;
 

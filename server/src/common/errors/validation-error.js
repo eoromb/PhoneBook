@@ -1,6 +1,9 @@
 const DefaultError = require('./default-error');
 const HttpStatus = require('http-status');
 
+/**
+ * Validation error
+ */
 class ValidationError extends DefaultError {
     /**
      * @constructor

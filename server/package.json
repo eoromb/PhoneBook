@@ -8,6 +8,7 @@
     "npm": ">=6.9.0"
   },
   "scripts": {
+    "start": "node server.js",
     "test:integration": "node_modules/.bin/mocha --config test/integration/.mocharc.json --no-opts --exclude **/state-definition/*.js --exclude **/unit/**/*.js"
   },
   "keywords": [

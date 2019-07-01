@@ -35,21 +35,23 @@ describe('ContactDataService', () => {
         expect(service).toBeTruthy();
     });
     it('should get contacts url from config server', () => {
-        const sub = service.getContacts(page, limit, filter).subscribe();
-        expect(configService.getContactsUrl).toHaveBeenCalledTimes(1);
+        const sub = service.getContacts(page, limit, filter).subscribe(() => {
+            expect(configService.getContactsUrl).toHaveBeenCalledTimes(1);
+        });
         sub.unsubscribe();
     });
     it('should call get paginated and filtered contacts list endpoint', () => {
         const sub = service.getContacts(page, limit, filter).subscribe(data => {
             expect(data.items).toEqual(contacts);
+            expect(httpClient.get).toHaveBeenCalledWith(`${contactsUrl}?page=${page}&limit=${limit}&filter=${filter}`,
+                { observe: 'response' });
         });
-        expect(httpClient.get).toHaveBeenCalledWith(`${contactsUrl}?page=${page}&limit=${limit}&filter=${filter}`, { observe: 'response' });
         sub.unsubscribe();
     });
     it('shoud call post contact add endpoint', () => {
         const sub = service.addContact(contact).subscribe(data => {
             expect(httpClient.post).toHaveBeenCalledWith(`${contactsUrl}`, contact);
-            sub.unsubscribe();
         });
+        sub.unsubscribe();
     });
 });

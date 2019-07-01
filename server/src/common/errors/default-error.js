@@ -1,4 +1,6 @@
-
+/**
+ * Default application error
+ */
 class DefaultError extends Error {
     constructor (message, code) {
         super();

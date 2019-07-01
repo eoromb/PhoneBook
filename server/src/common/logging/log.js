@@ -1,4 +1,7 @@
 const winston = require('winston');
+/**
+ * Gets logger object
+ */
 function getLogger ({mode = 'debug'} = {}) {
     return winston.createLogger({
         transports: [

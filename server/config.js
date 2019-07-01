@@ -1,8 +1,8 @@
 module.exports = {
-    'port': 3000, // env.PORT
+    'port': 3000,
     'database': {
-        'host': 'localhost', // env.DB_HOST
-        'port': 5432, // env.DB_PORT
+        'host': 'localhost', 
+        'port': 5433,
         'database': 'phonebook',
         'user': 'pbuser',
         'password': '12345',

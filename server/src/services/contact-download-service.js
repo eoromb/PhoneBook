@@ -6,6 +6,9 @@ const CsvFields = [
     {header: 'Phone number', key: 'phonenumber', width: 30}
 ];
 
+/**
+ * Service for contacts downloading
+ */
 class ContactDownloadService {
     constructor ({services}) {
         this.contactService = services.contact;
@@ -19,6 +22,9 @@ class ContactDownloadService {
         return wb;
     }
 
+    /**
+     * Downloads contacts in CSV file
+     */
     async downloadContacts ({page, limit, response}) {
         const contacts = (await this.contactService.getContactList({page, limit})).rows;
         const wb = ContactDownloadService.createCSVWorkBook(contacts, response);

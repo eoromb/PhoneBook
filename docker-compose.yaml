@@ -1,0 +1,38 @@
+version: '3.6'
+
+services:
+  db:
+    image: postgres:11.4-alpine
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_USER: pbuser
+      POSTGRES_DB: phonebook
+      POSTGRES_INITDB_ARGS: "-E UTF8"
+    volumes:
+      - ./server/src/repositories/artifacts/schema.sql:/docker-entrypoint-initdb.d/1.setup.sql
+      - ./server/src/repositories/artifacts/testdata.sql:/docker-entrypoint-initdb.d/2.setup.sql
+  server:
+    build:
+      context: ./server
+      args:
+        - NODE_ENV=production
+    restart: always
+    container_name: phonebookserver
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+  client:
+    build:
+      context: ./client
+    container_name: phonebookclient
+    depends_on:
+      - server
+    ports:
+      - "8080:80"

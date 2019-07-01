@@ -1,0 +1,6 @@
+**/.git
+node_modules
+documentation
+dist
+e2e
+*.md
